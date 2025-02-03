@@ -21,11 +21,12 @@ ExportedObj/
 *.pdb
 *.opendb
 *.VC.db
+*.cache
 Logs
 
 # IDK What are these
 **/Temp/
-**/UserSettings/Layouts/CurrentMaximizeLayout.dwlt
+**/CurrentMaximizeLayout.dwlt
 
 # Unity3D generated meta files
 *.pidb.meta
@@ -39,5 +40,5 @@ sysinfo.txt
 *.unitypackage
 
 # Crashlytics generated file
-Assets/StreamingAssets/crashlytics-build.properties
+**/crashlytics-build.properties
 
