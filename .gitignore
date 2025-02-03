@@ -26,7 +26,11 @@ Logs
 
 # IDK What are these
 **/Temp/
-**/CurrentMaximizeLayout.dwlt
+
+
+# Layout
+**/UserSettings/Layouts/
+
 
 # Unity3D generated meta files
 *.pidb.meta
