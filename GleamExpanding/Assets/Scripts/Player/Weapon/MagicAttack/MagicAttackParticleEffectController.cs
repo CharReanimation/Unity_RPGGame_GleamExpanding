@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SwordAttackParticleEffectController : MonoBehaviour
+public class MagicAttackParticleEffectController : MonoBehaviour
 {
     // Particle System
     public ParticleSystem particleEffect;

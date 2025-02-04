@@ -31,8 +31,8 @@ public class PlayerSwordAnimator : MonoBehaviour, IPlayerModule
     public Animator SwordAnimator;
     private PlayerMove playerMove;
 
-    [Header("Sword Particle System Settings")]
-    public SwordAttackParticleEffectController attackParticleEffectController;
+    [Header("Attack Particle System Settings")]
+    public AttackParticleEffectController attackParticleEffectController;
 
     // Combo Settings
     [Header("Combo Settings")]
@@ -103,8 +103,11 @@ public class PlayerSwordAnimator : MonoBehaviour, IPlayerModule
     // Handle Attack
     private void HandleAttack()
     {
-        // Handle Mouse Input;
+        // Handle Mouse Input
         HandleMouseInput();
+
+        // Handle Key Input
+        HandleKeyInput();
     }
 
 
@@ -122,17 +125,32 @@ public class PlayerSwordAnimator : MonoBehaviour, IPlayerModule
                 // Animator; Attack, isAttacking
                 SwordAnimator.SetTrigger("Attack");
                 SwordAnimator.SetBool("isAttacking", true);
+                SwordAnimator.SetBool("isBlendTreeMove", false);
                 SwordAnimator.SetInteger("comboValue", comboCount);
 
                 // isAttacking
                 isAttacking = true;
             }
-            else if (canCombo)
+            else if (canCombo) // Continue Attack
             {
                 comboCount++; // Next
                 SwordAnimator.SetInteger("comboValue", comboCount);
                 canCombo = false;
             }
+        }
+    }
+
+    // Handle Key Input
+    private void HandleKeyInput()
+    {
+        // Magic Attack
+        if (Input.GetKey(KeyCode.U) && !isAttacking && !canCombo && SwordAnimator.GetBool("isBlendTreeMove"))
+        {
+            // isAttacking
+            isAttacking = true;
+            SwordAnimator.SetBool("isAttacking", true);
+            SwordAnimator.SetBool("isBlendTreeMove", false);
+            SwordAnimator.SetTrigger("MagicAttack");
         }
     }
 
@@ -145,6 +163,18 @@ public class PlayerSwordAnimator : MonoBehaviour, IPlayerModule
         canCombo = true;
     }
 
+    public void MagicParticleEffectStart()
+    {
+        // Start Effect
+
+    }
+
+    public void MagicParticleEffectEnd()
+    {
+        // End Effect
+
+    }
+
     public void ComboParticleEffectStart()
     {
         // Start Effect
@@ -153,7 +183,7 @@ public class PlayerSwordAnimator : MonoBehaviour, IPlayerModule
 
     public void ComboParticleEffectEnd()
     {
-        // Stop Effect
+        // End Effect
         attackParticleEffectController.StopEffect();
     }
 
@@ -171,6 +201,9 @@ public class PlayerSwordAnimator : MonoBehaviour, IPlayerModule
         // Finish Attack
         isAttacking = false;
         SwordAnimator.SetBool("isAttacking", false);
+        SwordAnimator.SetBool("isBlendTreeMove", true);
+        SwordAnimator.ResetTrigger("Attack");
+        SwordAnimator.ResetTrigger("MagicAttack");
 
         canCombo = false;
         comboCount = 0;
