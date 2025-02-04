@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 21622fd77ab4bec44be0ac69194f3990
+guid: 6190da595170c484ba6f5b506dfc804d
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -33,11 +33,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Rifle Strafe R
+      name: Rifle Strafe Walk R
       takeName: mixamo.com
       internalID: -203655887218126122
       firstFrame: 0
-      lastFrame: 20
+      lastFrame: 43
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

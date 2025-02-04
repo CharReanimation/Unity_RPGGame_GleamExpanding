@@ -25,12 +25,6 @@ public class PlayerSwordAnimator : MonoBehaviour, IPlayerModule
     public string horizontalParamName = "Velocity X";
     public string verticalParamName = "Velocity Z";
 
-    // Attack Settings
-    [Header("Attack Settings")]
-    public float resetTime = 1.0f;
-    public float speedIncrement = 0.2f;
-    public float maxSpeed = 2.0f;
-    public int maxCombo = 3;
 
     // Private Fields
     [Header("Animator Settings")]
@@ -79,6 +73,7 @@ public class PlayerSwordAnimator : MonoBehaviour, IPlayerModule
         // Get Components
         playerProperties = GetComponent<PlayerProperties>();
         playerMove = GetComponent<PlayerMove>();
+
 
         // Debug: Log Error
         if (playerProperties == null)
@@ -174,10 +169,12 @@ public class PlayerSwordAnimator : MonoBehaviour, IPlayerModule
     public void OnAttackAnimationEnd()
     {
         // Finish Attack
-        SwordAnimator.SetBool("isAttacking", false);
         isAttacking = false;
-        comboCount = 0;
+        SwordAnimator.SetBool("isAttacking", false);
+
         canCombo = false;
+        comboCount = 0;
+        SwordAnimator.SetInteger("comboValue", comboCount);
     }
 
 

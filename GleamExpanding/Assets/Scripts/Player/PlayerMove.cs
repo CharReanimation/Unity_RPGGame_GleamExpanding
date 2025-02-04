@@ -32,7 +32,6 @@ public class PlayerMove : MonoBehaviour, IPlayerModule
 
     [Header("Mouse Look Properties")]
     public float mouseSensitivity = 50f; // Mouse sensitivity
-    public float verticalRotationLimit = 80f; // Limit vertical rotation
 
 
     [Header("Speed Smoothing")]
@@ -167,9 +166,9 @@ public class PlayerMove : MonoBehaviour, IPlayerModule
     private void SetSpeedToZero()
     {
         // Speed Set To Zero
-        if (Mathf.Abs(currentXSpeed) < 0.01f)
+        if (Mathf.Abs(currentXSpeed) < 0.05f)
             currentXSpeed = 0f;
-        if (Mathf.Abs(currentZSpeed) < 0.01f)
+        if (Mathf.Abs(currentZSpeed) < 0.05f)
             currentZSpeed = 0f;
 
         // Set Running: False
