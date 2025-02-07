@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerModuleController : MonoBehaviour
 {
     // Private Fields
     private IPlayerModule[] playerModules;

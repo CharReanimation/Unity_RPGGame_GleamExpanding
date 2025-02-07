@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -41,10 +42,19 @@ public class CameraController : MonoBehaviour
     private float horizontalRotation = 0f; // Horizontal Rotation Angle
     private float verticalRotation = 0f; // Vertical Rotation Angle
 
+    private CinemachineImpulseSource impulseSource;
+
     // PlayerMove
     public PlayerMove playerMove;
 
 
+
+
+    private void Start()
+    {
+        // Get Components
+        GetComponents();
+    }
 
 
     void LateUpdate()
@@ -65,6 +75,24 @@ public class CameraController : MonoBehaviour
 
 
 
+    // Get Components
+    private void GetComponents()
+    {
+        // Get Components
+        impulseSource = GetComponent<CinemachineImpulseSource>();
+    }
+
+
+
+
+    // Shake Camera
+    public void ShakeCamera()
+    {
+        if (impulseSource != null)
+        {
+            impulseSource.GenerateImpulse();
+        }
+    }
 
 
 

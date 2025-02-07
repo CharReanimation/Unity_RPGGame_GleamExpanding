@@ -1,0 +1,17 @@
+Player Animation:
+	Hand Animation
+	Hand Animator
+	Hand Animation Attack Effects
+
+
+Player Interaction:
+	Obejct Interaction
+	Pickup
+	Inventory System
+
+
+Player Weapon:
+	Weapon Interaction
+
+
+UI:

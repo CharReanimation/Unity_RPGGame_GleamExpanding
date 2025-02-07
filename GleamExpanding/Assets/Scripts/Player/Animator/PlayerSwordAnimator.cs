@@ -18,6 +18,9 @@ public class PlayerSwordAnimator : MonoBehaviour, IPlayerModule
     }
 
 
+    [Header("Camera")]
+    public CameraController cameraController;
+
     // Public Fields
 
 
@@ -95,6 +98,11 @@ public class PlayerSwordAnimator : MonoBehaviour, IPlayerModule
         {
             Debug.LogError("SwordAttackParticleEffectController is missing!");
         }
+
+        if(cameraController == null)
+        {
+            Debug.LogError("No Camera Controller assigned!");
+        }
     }
 
 
@@ -158,6 +166,12 @@ public class PlayerSwordAnimator : MonoBehaviour, IPlayerModule
 
 
     // Animation Event
+    public void AttackCameraShake()
+    {
+
+    }
+
+
     public void EnableCombo()
     {
         canCombo = true;
@@ -179,6 +193,9 @@ public class PlayerSwordAnimator : MonoBehaviour, IPlayerModule
     {
         // Start Effect
         attackParticleEffectController.PlayEffect();
+
+        // Shake Camera
+        cameraController.ShakeCamera();
     }
 
     public void ComboParticleEffectEnd()
