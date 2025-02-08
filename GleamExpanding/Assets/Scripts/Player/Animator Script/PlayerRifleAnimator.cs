@@ -108,11 +108,6 @@ public class PlayerRifleAnimator : MonoBehaviour, IPlayerModule
 
 
     // Animation Event
-    // Start Slide
-    public void PlayerRifleStartSlide()
-    {
-        playerMove.PlayerForwardSlide();
-    }
 
 
     // Attack Animation End

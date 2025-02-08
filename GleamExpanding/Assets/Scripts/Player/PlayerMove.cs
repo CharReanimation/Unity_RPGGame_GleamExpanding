@@ -19,8 +19,10 @@ public class PlayerMove : MonoBehaviour, IPlayerModule
     // Public Fields
     [Header("Player Movement Properties")]
     public float moveSpeed = 2f; // Movement Speed
+    public const float runSpeedMultiplier = 2f; // Run Speed Multiplier
     public float rotationSpeed = 5f; // Rotation Speed
 
+    [Header("Player Slide Properties")]
     public float slideDistance = 5f;  // Sliding Distance
     public float slideDuration = 0.5f; // Sliding Time
     private bool isSliding = false;
@@ -46,7 +48,6 @@ public class PlayerMove : MonoBehaviour, IPlayerModule
     private float xSpeedVelocity; // SmoothDamp
     private float zSpeedVelocity; // SmoothDamp
     private float horizontal, vertical; // Keyboard Input
-    private bool RunKey;
 
 
 
@@ -59,9 +60,28 @@ public class PlayerMove : MonoBehaviour, IPlayerModule
 
         // Lock Cursor
         Cursor.lockState = CursorLockMode.Locked;
+
+        // Key Manager
+        if (KeyManager.Instance != null)
+        {
+            KeyManager.Instance.OnMoveInput += HandleMoveInput;
+            KeyManager.Instance.OnRunPressed += HandleRunInput;
+        }
+        else
+        {
+            Debug.LogError("KeyManager.Instance Not Found");
+        }
     }
 
 
+    private void OnDestroy()
+    {
+        if (KeyManager.Instance != null)
+        {
+            KeyManager.Instance.OnMoveInput -= HandleMoveInput;
+            KeyManager.Instance.OnRunPressed -= HandleRunInput;
+        }
+    }
 
 
     // Get Components
@@ -87,11 +107,6 @@ public class PlayerMove : MonoBehaviour, IPlayerModule
     // Handle Module: Void Update
     public void HandleModule()
     {
-        // Set Attacking Bool
-
-        // Handle Keyboard Input
-        HandleKeyboardInput();
-
         // Handle Player Move
         if (!isAttacking) // Cannot move while Attacking
         {
@@ -112,19 +127,18 @@ public class PlayerMove : MonoBehaviour, IPlayerModule
     }
 
 
-
-
-    // Handle Keyboard Input
-    private void HandleKeyboardInput()
+    // Handle Move Input
+    private void HandleMoveInput(float h, float v)
     {
-        // Get Keyboard Input
-        horizontal = Input.GetAxis("Horizontal");
-        vertical = Input.GetAxis("Vertical");
-
-        // Run
-        RunKey = Input.GetKey(KeyCode.LeftShift);
+        horizontal = h;
+        vertical = v;
     }
 
+    // Handle Run Input
+    private void HandleRunInput(bool run)
+    {
+        isRunning = run;
+    }
 
 
 
@@ -181,21 +195,10 @@ public class PlayerMove : MonoBehaviour, IPlayerModule
     // Player Move
     private void PlayerMovement(Vector3 direction)
     {
-        // Check Shift Key Pressed
-        float speedMultiplier = 1.0f;
-        if (RunKey) // Run
-        {
-            isRunning = true;
-            speedMultiplier = 1.5f;
-        }
-        else if (!RunKey) // Not Run
-        {
-            isRunning = false;
-            speedMultiplier = 1.0f;
-        }
+        // Spped Multiplier
+        float speedMultiplier = isRunning ? runSpeedMultiplier : 1.0f;
 
-
-        // Use Largest Value
+        // Direction
         if (direction.x != 0 && direction.z != 0)
         {
             if (Mathf.Abs(direction.x) > Mathf.Abs(direction.z))
@@ -266,29 +269,49 @@ public class PlayerMove : MonoBehaviour, IPlayerModule
 
 
     // Player Forward Slide
-    public void PlayerForwardSlide()
+    public void PlayerSlide(string direction)
     {
         if (!isSliding)
         {
-            StartCoroutine(HandlePlayerForwardSlide());
+            StartCoroutine(HandlePlayerSlide(direction));
         }
     }
+
     // Coroutine: Handle Player Forward Slide
-    private IEnumerator HandlePlayerForwardSlide()
+    private IEnumerator HandlePlayerSlide(string direction)
     {
         isSliding = true;
         Vector3 startPosition = transform.position;
-        Vector3 targetPosition = startPosition + transform.forward * slideDistance; // Move Forward
+        Vector3 targetPosition = startPosition;
+
+        switch (direction)
+        {
+            case "Forward":
+                targetPosition += transform.forward * slideDistance;
+                break;
+            case "Backward":
+                targetPosition -= transform.forward * slideDistance;
+                break;
+            case "Left":
+                targetPosition -= transform.right * slideDistance;
+                break;
+            case "Right":
+                targetPosition += transform.right * slideDistance;
+                break;
+            default:
+                isSliding = false;
+                yield break;
+        }
 
         float elapsedTime = 0f;
         while (elapsedTime < slideDuration)
         {
             transform.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime / slideDuration);
             elapsedTime += Time.deltaTime;
-            yield return null; 
+            yield return null;
         }
 
-        transform.position = targetPosition; // Set Position
+        transform.position = targetPosition;
         isSliding = false;
     }
 

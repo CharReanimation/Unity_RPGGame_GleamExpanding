@@ -45,8 +45,26 @@ public class PlayerHandAnimator : MonoBehaviour, IPlayerModule
     {
         // Get Components
         GetComponents();
+
+        // Key Manager
+        if (KeyManager.Instance != null)
+        {
+            KeyManager.Instance.OnDodgePressed += HandlePlayerDodge;
+        }
+        else
+        {
+            Debug.LogError("KeyManager.Instance Not Found");
+        }
     }
 
+
+    private void OnDestroy()
+    {
+        if (KeyManager.Instance != null)
+        {
+            KeyManager.Instance.OnDodgePressed -= HandlePlayerDodge;
+        }
+    }
 
 
 
@@ -109,9 +127,9 @@ public class PlayerHandAnimator : MonoBehaviour, IPlayerModule
 
     // Animation Event
     // Start Slide
-    public void PlayerHandStartSlide()
+    public void PlayerHandStartSlide(string direction)
     {
-        playerMove.PlayerForwardSlide();
+        playerMove.PlayerSlide(direction);
     }
 
 
@@ -149,6 +167,37 @@ public class PlayerHandAnimator : MonoBehaviour, IPlayerModule
             HandAnimator.SetBool("isRunning", false);
         }
     }
+
+
+    // Handle Player Dodge
+    private void HandlePlayerDodge(string direction)
+    {
+        if (isRunning) return;
+
+        switch (direction)
+        {
+            case "Forward":
+                HandAnimator.SetTrigger("ForwardDodge");
+                break;
+
+            case "Backward":
+                HandAnimator.SetTrigger("BackwardDodge");
+                break;
+
+            case "Left":
+                HandAnimator.SetTrigger("LeftDodge");
+                break;
+
+            case "Right":
+                HandAnimator.SetTrigger("RightDodge");
+                break;
+
+            default:
+                break;
+        }
+    }
+
+
 
 
     // Handle Player Move Blend Tree

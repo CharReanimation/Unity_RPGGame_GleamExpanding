@@ -111,7 +111,9 @@ public class PlayerSwordAnimator : MonoBehaviour, IPlayerModule
                 SwordAnimator.SetTrigger("Attack");
                 SwordAnimator.SetBool("isAttacking", true);
                 SwordAnimator.SetBool("isBlendTreeMove", false);
-                SwordAnimator.SetInteger("comboValue", comboCount);
+
+                if(!SwordAnimator.GetBool("isRunning"))
+                    SwordAnimator.SetInteger("comboValue", comboCount);
 
                 // isAttacking
                 isAttacking = true;
@@ -121,6 +123,22 @@ public class PlayerSwordAnimator : MonoBehaviour, IPlayerModule
                 comboCount++; // Next
                 SwordAnimator.SetInteger("comboValue", comboCount);
                 canCombo = false;
+            }
+        }
+
+        // Mouse Right Press: Down
+        if (Input.GetMouseButtonDown(1))
+        {
+            // Start Attack
+            if (!SwordAnimator.GetBool("isRunning"))
+            {
+                // Animator; Attack, isAttacking
+                SwordAnimator.SetTrigger("FastAttack");
+                SwordAnimator.SetBool("isAttacking", true);
+                SwordAnimator.SetBool("isBlendTreeMove", false);
+
+                // isAttacking
+                isAttacking = true;
             }
         }
     }
@@ -145,7 +163,8 @@ public class PlayerSwordAnimator : MonoBehaviour, IPlayerModule
     // Animation Event
     public void AttackCameraShake()
     {
-
+        // Shake Camera
+        cameraController.ShakeCamera();
     }
 
 
@@ -172,7 +191,7 @@ public class PlayerSwordAnimator : MonoBehaviour, IPlayerModule
         attackParticleEffectController.PlayEffect();
 
         // Shake Camera
-        cameraController.ShakeCamera();
+        AttackCameraShake();
     }
 
     public void ComboParticleEffectEnd()
@@ -185,7 +204,7 @@ public class PlayerSwordAnimator : MonoBehaviour, IPlayerModule
     // Start Slide
     public void PlayerSwordStartSlide()
     {
-        playerMove.PlayerForwardSlide();
+        playerMove.PlayerSlide("Forward");
     }
 
 
