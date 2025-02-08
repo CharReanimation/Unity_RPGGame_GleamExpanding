@@ -2,6 +2,9 @@ Player Animation:
 	Hand Animation
 	Hand Animator
 	Hand Animation Attack Effects
+	Magic Animator
+	Magic Animator
+	Magic Animation Attack Effects
 
 
 Player Interaction:
@@ -15,3 +18,11 @@ Player Weapon:
 
 
 UI:
+
+
+
+Problems:
+	Animation Stuck in the end while trigger attack
+	Magic Cannot in Sword Animator
+	Sword Animator Require Sheath
+	Sword Animation Lost Particle Effect

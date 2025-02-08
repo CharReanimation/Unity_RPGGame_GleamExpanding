@@ -20,7 +20,8 @@ public class PlayerAnimatorManager : MonoBehaviour
 
     [Header("Player Weapon")]
     public PlayerWeaponManager playerWeaponManager;
-    private string currentWeaponType;
+    private Weapon currentWeapon => playerWeaponManager.currentWeapon;
+    private WeaponData currentWeaponData => playerWeaponManager.currentWeapon.weaponData;
 
 
 
@@ -31,21 +32,26 @@ public class PlayerAnimatorManager : MonoBehaviour
         // Get Components
         GetComponents();
 
-        // Swtich Weapon
-        if (playerWeaponManager.GetCurrentWeaponInfo().weaponType == null) // No Weapon Type
+        // Deactivate All Animator Script
+        DeactivateAllAnimatorScript();
+
+        // Switch Weapon
+        if (currentWeapon == null) // No Weapon
         {
             // Current Weapon
             Debug.Log("No Current Weapon Type!");
+
+            // Handle Switch Weapon: Hand
+            HandleSwitchWeapon(handAnimatorController, playerHandScript); // Hand
         }
         else
         {
             // Switch Weapon
-            SwitchWeaponAnimator(currentWeaponType);
-        }
-        
+            SwitchWeaponAnimator(currentWeaponData.weaponType);
 
-        // Current Weapon
-        Debug.Log("Current Weapon Type: " + currentWeaponType);
+            // Current Weapon
+            Debug.Log("Current Weapon Type: " + currentWeaponData.weaponType);
+        }
     }
 
 
@@ -78,17 +84,17 @@ public class PlayerAnimatorManager : MonoBehaviour
         {
             case "Hand":
                 // Handle Switch Weapon
-                HandleSwitchWeapon(weaponType, handAnimatorController, playerHandScript); // Hand
+                HandleSwitchWeapon(handAnimatorController, playerHandScript); // Hand
                 break;
 
             case "Sword_Large":
                 // Handle Switch Weapon
-                HandleSwitchWeapon(weaponType, swordAnimatorController, playerSwordScript); // Sword_Large
+                HandleSwitchWeapon(swordAnimatorController, playerSwordScript); // Sword_Large
                 break;
 
             case "Rifle":
                 // Handle Switch Weapon
-                HandleSwitchWeapon(weaponType, rifleAnimatorController, playerRifleScript); // Rifle
+                HandleSwitchWeapon(rifleAnimatorController, playerRifleScript); // Rifle
                 break;
         }
 
@@ -99,27 +105,38 @@ public class PlayerAnimatorManager : MonoBehaviour
 
 
     // Handle Switch Weapon
-    private void HandleSwitchWeapon(string weaponType, RuntimeAnimatorController currentAnimatorController, MonoBehaviour currentWeaponScript)
+    private void HandleSwitchWeapon(RuntimeAnimatorController currentAnimatorController, MonoBehaviour currentWeaponScript)
     {
         animator.runtimeAnimatorController = currentAnimatorController;
         EnableOnlyOneScript(currentWeaponScript);
-        Debug.Log("Current Weapon Type: " + weaponType);
+
+        // Force Refresh
+        GetComponent<PlayerModuleController>().ForceRefresh();
     }
 
 
 
 
+    // Enable Only One Script
     private void EnableOnlyOneScript(MonoBehaviour activeScript)
     {
-        // Deactive All Scripts
-        playerHandScript.enabled = false;
-        playerSwordScript.enabled = false;
-        playerRifleScript.enabled = false;
+        // Deactivate All Animator Script
+        DeactivateAllAnimatorScript();
 
         // Active Current Script
         if (activeScript != null)
         {
             activeScript.enabled = true;
         }
+    }
+
+
+    // Deactivate All Animator Script
+    private void DeactivateAllAnimatorScript()
+    {
+        // Deactive All Scripts
+        if (playerHandScript != null) playerHandScript.enabled = false;
+        if (playerSwordScript != null) playerSwordScript.enabled = false;
+        if (playerRifleScript != null) playerRifleScript.enabled = false;
     }
 }

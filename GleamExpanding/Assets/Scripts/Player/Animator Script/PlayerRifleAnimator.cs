@@ -33,7 +33,8 @@ public class PlayerRifleAnimator : MonoBehaviour, IPlayerModule
 
     // Private Fields
     [Header("Animator Settings")]
-    public Animator RifleAnimator;
+    private PlayerAnimatorManager playerAnimatorManager;
+    private Animator RifleAnimator => playerAnimatorManager.animator;
     private PlayerMove playerMove;
 
 
@@ -66,24 +67,10 @@ public class PlayerRifleAnimator : MonoBehaviour, IPlayerModule
     private void GetComponents()
     {
         // Get Components
-        playerProperties = GetComponent<PlayerProperties>();
-        playerMove = GetComponent<PlayerMove>();
-
-        // Debug: Log Error
-        if (playerProperties == null)
-        {
-            Debug.LogError("Player Properties is not assigned!");
-        }
-
-        if (RifleAnimator == null)
-        {
-            Debug.LogError("Animator is not assigned!");
-        }
-
-        if (playerMove == null)
-        {
-            Debug.LogError("PlayerMove is missing!");
-        }
+        PlayerAnimatorScriptComponentHelper.GetPlayerAnimatorScriptComponents(gameObject,
+                                            out playerAnimatorManager,
+                                            out playerProperties,
+                                            out playerMove);
     }
 
 
@@ -122,14 +109,14 @@ public class PlayerRifleAnimator : MonoBehaviour, IPlayerModule
 
     // Animation Event
     // Start Slide
-    public void PlayerStartSlide()
+    public void PlayerRifleStartSlide()
     {
         playerMove.PlayerForwardSlide();
     }
 
 
     // Attack Animation End
-    public void OnAttackAnimationEnd()
+    public void OnRifleAttackAnimationEnd()
     {
         // Finish Attack
         RifleAnimator.SetBool("isAttacking", false);

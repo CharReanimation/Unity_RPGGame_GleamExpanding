@@ -6,7 +6,7 @@ public class PlayerModuleController : MonoBehaviour
 {
     // Private Fields
     private IPlayerModule[] playerModules;
-
+    private List<IPlayerModule> activeModules = new List<IPlayerModule>();
 
 
     // Start Frame
@@ -14,6 +14,9 @@ public class PlayerModuleController : MonoBehaviour
     {
         // Get Components
         GetComponents();
+
+        // Refresh Modules
+        RefreshModules();
     }
 
 
@@ -50,7 +53,34 @@ public class PlayerModuleController : MonoBehaviour
         // Handle Module
         foreach (var module in playerModules)
         {
-            module.HandleModule();
+            // Handle Activated Module
+            if (((MonoBehaviour)module).enabled)
+            {
+                module.HandleModule();
+            }
         }
+    }
+
+
+    // Refresh Modules
+    private void RefreshModules()
+    {
+        activeModules.Clear();
+        playerModules = GetComponentsInChildren<IPlayerModule>();
+
+        foreach (var module in playerModules)
+        {
+            if (((MonoBehaviour)module).enabled)
+            {
+                activeModules.Add(module);
+            }
+        }
+    }
+
+
+    // Fore Refresh
+    public void ForceRefresh()
+    {
+        RefreshModules();
     }
 }

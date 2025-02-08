@@ -31,8 +31,10 @@ public class PlayerSwordAnimator : MonoBehaviour, IPlayerModule
 
     // Private Fields
     [Header("Animator Settings")]
-    public Animator SwordAnimator;
+    private PlayerAnimatorManager playerAnimatorManager;
+    private Animator SwordAnimator => playerAnimatorManager.animator;
     private PlayerMove playerMove;
+
 
     [Header("Attack Particle System Settings")]
     public AttackParticleEffectController attackParticleEffectController;
@@ -74,35 +76,10 @@ public class PlayerSwordAnimator : MonoBehaviour, IPlayerModule
     private void GetComponents()
     {
         // Get Components
-        playerProperties = GetComponent<PlayerProperties>();
-        playerMove = GetComponent<PlayerMove>();
-
-
-        // Debug: Log Error
-        if (playerProperties == null)
-        {
-            Debug.LogError("Player Properties is not assigned!");
-        }
-
-        if (SwordAnimator == null)
-        {
-            Debug.LogError("Animator is not assigned!");
-        }
-
-        if (playerMove == null)
-        {
-            Debug.LogError("PlayerMove is missing!");
-        }
-
-        if (attackParticleEffectController == null)
-        {
-            Debug.LogError("SwordAttackParticleEffectController is missing!");
-        }
-
-        if(cameraController == null)
-        {
-            Debug.LogError("No Camera Controller assigned!");
-        }
+        PlayerAnimatorScriptComponentHelper.GetPlayerAnimatorScriptComponents(gameObject,
+                                            out playerAnimatorManager,
+                                            out playerProperties,
+                                            out playerMove);
     }
 
 
@@ -206,14 +183,14 @@ public class PlayerSwordAnimator : MonoBehaviour, IPlayerModule
 
 
     // Start Slide
-    public void PlayerStartSlide()
+    public void PlayerSwordStartSlide()
     {
         playerMove.PlayerForwardSlide();
     }
 
 
     // Attack Animation End
-    public void OnAttackAnimationEnd()
+    public void OnSwordAttackAnimationEnd()
     {
         // Finish Attack
         isAttacking = false;

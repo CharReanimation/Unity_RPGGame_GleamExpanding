@@ -8,7 +8,6 @@ public class PlayerWeaponManager : MonoBehaviour
     public List<WeaponData> availableWeapons = new List<WeaponData>(); // Store Player Weapon
     public Transform weaponHolder; // Weapon Holder
 
-    // Private Fields
     public Weapon currentWeapon { get; private set; }
 
 
@@ -43,8 +42,13 @@ public class PlayerWeaponManager : MonoBehaviour
         }
 
         GameObject weaponObj = Instantiate(weaponData.weaponPrefab, weaponHolder);
+
+        // Set Current Weapon & Current Weapon Data
         currentWeapon = weaponObj.GetComponent<Weapon>();
         currentWeapon.weaponData = weaponData;
+
+        // Switch Weapon Automatically
+        GetComponent<PlayerAnimatorManager>().SwitchWeaponAnimator(currentWeapon.weaponData.weaponType);
     }
 
     // Drop Weapon
@@ -62,15 +66,6 @@ public class PlayerWeaponManager : MonoBehaviour
     }
 
 
-    // Get Current Weapon Info
-    public WeaponData GetCurrentWeaponInfo()
-    {
-        if (currentWeapon != null)
-        {
-            return currentWeapon.weaponData;
-        }
-        return null;
-    }
 
 
     // Attack

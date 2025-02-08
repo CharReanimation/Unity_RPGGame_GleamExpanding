@@ -6,6 +6,7 @@ public class KeyManager : MonoBehaviour
     // Public Fields
     public static KeyManager Instance;
     public event Action OnInteractPressed;
+    public event Action OnSwitchWeaponPressed;
 
 
 
@@ -35,10 +36,16 @@ public class KeyManager : MonoBehaviour
     // Handle Key Input
     private void HandleKeyInput()
     {
-        // Press 'E'
+        // Press 'E': Interact Object
         if (Input.GetKeyDown(KeyCode.E))
         {
             OnInteractPressed?.Invoke();
+        }
+
+        // Press 'Q': Switch Weapon
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            OnSwitchWeaponPressed?.Invoke();
         }
     }
 }
